@@ -8,10 +8,10 @@ module.exports = (toolbox: GluegunToolbox) => {
   }
 
   // enable this if you want to read configuration in from
-  // the current folder's package.json (in a "totem-cli" property),
-  // totem-cli.config.json, etc.
+  // the current folder's package.json (in a "react-native-scripts-cli" property),
+  // react-native-scripts-cli.config.json, etc.
   // toolbox.config = {
   //   ...toolbox.config,
-  //   ...toolbox.config.loadConfig(process.cwd(), "totem-cli")
+  //   ...toolbox.config.loadConfig(process.cwd(), "react-native-scripts-cli")
   // }
 }

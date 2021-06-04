@@ -1,11 +1,11 @@
 {
-  "name": "totem-cli",
+  "name": "react-native-scripts-cli",
   "version": "0.0.1",
-  "description": "totem-cli CLI",
+  "description": "react-native-scripts-cli CLI",
   "private": true,
   "types": "build/types/types.d.ts",
   "bin": {
-    "totem-cli": "bin/totem-cli"
+    "react-native-scripts-cli": "bin/react-native-scripts-cli"
   },
   "scripts": {
     "format": "prettier --write **/*.{js,ts,tsx,json}",

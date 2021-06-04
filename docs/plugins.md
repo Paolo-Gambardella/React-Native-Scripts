@@ -1,10 +1,10 @@
-# Plugin guide for totem-cli
+# Plugin guide for react-native-scripts-cli
 
-Plugins allow you to add features to totem-cli, such as commands and
+Plugins allow you to add features to react-native-scripts-cli, such as commands and
 extensions to the `toolbox` object that provides the majority of the functionality
-used by totem-cli.
+used by react-native-scripts-cli.
 
-Creating a totem-cli plugin is easy. Just create a repo with two folders:
+Creating a react-native-scripts-cli plugin is easy. Just create a repo with two folders:
 
 ```
 commands/
@@ -42,6 +42,6 @@ This is then accessible in your plugin's commands as `toolbox.bar`.
 
 # Loading a plugin
 
-To load a particular plugin (which has to start with `totem-cli-*`),
-install it to your project using `npm install --save-dev totem-cli-PLUGINNAME`,
-and totem-cli will pick it up automatically.
+To load a particular plugin (which has to start with `react-native-scripts-cli-*`),
+install it to your project using `npm install --save-dev react-native-scripts-cli-PLUGINNAME`,
+and react-native-scripts-cli will pick it up automatically.

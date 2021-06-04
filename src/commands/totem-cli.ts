@@ -10,7 +10,7 @@ const commands: Record<Choice, typeof generate | typeof scripts> = {
 }
 
 const command: GluegunCommand = {
-  name: 'totem-cli',
+  name: 'react-native-scripts-cli',
   run: async (toolbox) => {
     const { prompt } = toolbox
 
