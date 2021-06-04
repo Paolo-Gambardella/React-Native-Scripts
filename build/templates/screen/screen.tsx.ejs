@@ -1,0 +1,14 @@
+import React, { memo, FC } from 'react'
+import { Screen, View, Text } from '@components'
+import { useTheme } from '@hooks'
+import { config } from '@config'
+import { Props } from './<%= props.name %>.props'
+import { styles } from './<%= props.name %>.styles'
+
+export const <%= props.name %>: FC<Props> = memo(({ ...props }) => {
+  return (
+    <Screen>
+      {/* your screen */}
+    </Screen>
+  )
+})
