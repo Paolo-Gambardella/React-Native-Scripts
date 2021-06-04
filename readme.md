@@ -1,6 +1,6 @@
-# totem-cli CLI
+# React-Native-Scripts
 
-A CLI for totem-cli.
+Scripts for React Native project
 
 ## Customizing your CLI
 
