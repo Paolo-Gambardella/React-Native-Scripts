@@ -5,7 +5,7 @@
   "private": true,
   "types": "build/types/types.d.ts",
   "bin": {
-    "react-native-scripts-cli": "bin/react-native-scripts-cli"
+    "rnsc": "bin/react-native-scripts-cli"
   },
   "scripts": {
     "format": "prettier --write **/*.{js,ts,tsx,json}",
