@@ -59,10 +59,6 @@ exports.run = function (toolbox) {
                     name = strings.pascalCase(name);
                     templates = [
                         {
-                            template: 'component/component.story.tsx.ejs',
-                            target: "app/components/" + name + "/" + name + ".story.tsx",
-                        },
-                        {
                             template: 'component/index.ts.ejs',
                             target: "app/components/" + name + "/index.ts",
                         },
@@ -82,21 +78,30 @@ exports.run = function (toolbox) {
                     return [4 /*yield*/, utils_1.generateTemplates(toolbox, templates, { name: name })];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, patching.append('app/components/index.ts', "export * from './" + name + "'")];
+                    return [4 /*yield*/, patching.append('app/components/index.ts', "export * from './" + name + "'")
+                        /*await patching.append(
+                          'storybook/storybook-registry.ts',
+                          `require('../app/components/${name}/${name}.story')`
+                        )*/
+                    ];
                 case 3:
                     _a.sent();
-                    return [4 /*yield*/, patching.append('storybook/storybook-registry.ts', "require('../app/components/" + name + "/" + name + ".story')")];
-                case 4:
-                    _a.sent();
+                    /*await patching.append(
+                      'storybook/storybook-registry.ts',
+                      `require('../app/components/${name}/${name}.story')`
+                    )*/
                     return [4 /*yield*/, utils_1.runPrettier(toolbox, __spreadArrays(templates.map(function (template) { return template.target; }), [
                             'app/components/index.ts',
-                            'storybook/storybook-registry.ts',
                         ]))];
-                case 5:
+                case 4:
+                    /*await patching.append(
+                      'storybook/storybook-registry.ts',
+                      `require('../app/components/${name}/${name}.story')`
+                    )*/
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29tcG9uZW50LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2NvbW1hbmRzL2dlbmVyYXRlL2NvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EscUNBQThFO0FBRWpFLFFBQUEsV0FBVyxHQUN0QixnRUFBZ0UsQ0FBQTtBQUVyRCxRQUFBLEdBQUcsR0FBRyxVQUFnQixPQUF1Qjs7Ozs7O29CQUVoRCxVQUFVLEdBQXdCLE9BQU8sV0FBL0IsRUFBRSxPQUFPLEdBQWUsT0FBTyxRQUF0QixFQUFFLFFBQVEsR0FBSyxPQUFPLFNBQVosQ0FBWTtvQkFHdEMscUJBQU0sd0JBQWdCLENBQy9CLE9BQU8sRUFDUCxVQUFVLENBQUMsS0FBSyxFQUNoQixrQ0FBa0MsQ0FDbkMsRUFBQTs7b0JBSkcsSUFBSSxHQUFHLFNBSVY7b0JBQ0QsSUFBSSxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUE7b0JBRXpCLFNBQVMsR0FBRzt3QkFDaEI7NEJBQ0UsUUFBUSxFQUFFLG1DQUFtQzs0QkFDN0MsTUFBTSxFQUFFLG9CQUFrQixJQUFJLFNBQUksSUFBSSxlQUFZO3lCQUNuRDt3QkFDRDs0QkFDRSxRQUFRLEVBQUUsd0JBQXdCOzRCQUNsQyxNQUFNLEVBQUUsb0JBQWtCLElBQUksY0FBVzt5QkFDMUM7d0JBQ0Q7NEJBQ0UsUUFBUSxFQUFFLGtDQUFrQzs0QkFDNUMsTUFBTSxFQUFFLG9CQUFrQixJQUFJLFNBQUksSUFBSSxjQUFXO3lCQUNsRDt3QkFDRDs0QkFDRSxRQUFRLEVBQUUsbUNBQW1DOzRCQUM3QyxNQUFNLEVBQUUsb0JBQWtCLElBQUksU0FBSSxJQUFJLGVBQVk7eUJBQ25EO3dCQUNEOzRCQUNFLFFBQVEsRUFBRSw2QkFBNkI7NEJBQ3ZDLE1BQU0sRUFBRSxvQkFBa0IsSUFBSSxTQUFJLElBQUksU0FBTTt5QkFDN0M7cUJBQ0YsQ0FBQTtvQkFFRCxxQkFBTSx5QkFBaUIsQ0FBQyxPQUFPLEVBQUUsU0FBUyxFQUFFLEVBQUUsSUFBSSxNQUFBLEVBQUUsQ0FBQyxFQUFBOztvQkFBckQsU0FBcUQsQ0FBQTtvQkFFckQscUJBQU0sUUFBUSxDQUFDLE1BQU0sQ0FBQyx5QkFBeUIsRUFBRSxzQkFBb0IsSUFBSSxNQUFHLENBQUMsRUFBQTs7b0JBQTdFLFNBQTZFLENBQUE7b0JBRTdFLHFCQUFNLFFBQVEsQ0FBQyxNQUFNLENBQ25CLGlDQUFpQyxFQUNqQyxnQ0FBOEIsSUFBSSxTQUFJLElBQUksYUFBVSxDQUNyRCxFQUFBOztvQkFIRCxTQUdDLENBQUE7b0JBQ0QscUJBQU0sbUJBQVcsQ0FBQyxPQUFPLGlCQUNwQixTQUFTLENBQUMsR0FBRyxDQUFDLFVBQUMsUUFBUSxJQUFLLE9BQUEsUUFBUSxDQUFDLE1BQU0sRUFBZixDQUFlLENBQUM7NEJBQy9DLHlCQUF5Qjs0QkFDekIsaUNBQWlDOzJCQUNqQyxFQUFBOztvQkFKRixTQUlFLENBQUE7Ozs7O0NBQ0gsQ0FBQSJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29tcG9uZW50LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL2NvbW1hbmRzL2dlbmVyYXRlL2NvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EscUNBQThFO0FBRWpFLFFBQUEsV0FBVyxHQUN0QixnRUFBZ0UsQ0FBQTtBQUVyRCxRQUFBLEdBQUcsR0FBRyxVQUFnQixPQUF1Qjs7Ozs7O29CQUVoRCxVQUFVLEdBQXdCLE9BQU8sV0FBL0IsRUFBRSxPQUFPLEdBQWUsT0FBTyxRQUF0QixFQUFFLFFBQVEsR0FBSyxPQUFPLFNBQVosQ0FBWTtvQkFHdEMscUJBQU0sd0JBQWdCLENBQy9CLE9BQU8sRUFDUCxVQUFVLENBQUMsS0FBSyxFQUNoQixrQ0FBa0MsQ0FDbkMsRUFBQTs7b0JBSkcsSUFBSSxHQUFHLFNBSVY7b0JBQ0QsSUFBSSxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUE7b0JBT3pCLFNBQVMsR0FBRzt3QkFDaEI7NEJBQ0UsUUFBUSxFQUFFLHdCQUF3Qjs0QkFDbEMsTUFBTSxFQUFFLG9CQUFrQixJQUFJLGNBQVc7eUJBQzFDO3dCQUNEOzRCQUNFLFFBQVEsRUFBRSxrQ0FBa0M7NEJBQzVDLE1BQU0sRUFBRSxvQkFBa0IsSUFBSSxTQUFJLElBQUksY0FBVzt5QkFDbEQ7d0JBQ0Q7NEJBQ0UsUUFBUSxFQUFFLG1DQUFtQzs0QkFDN0MsTUFBTSxFQUFFLG9CQUFrQixJQUFJLFNBQUksSUFBSSxlQUFZO3lCQUNuRDt3QkFDRDs0QkFDRSxRQUFRLEVBQUUsNkJBQTZCOzRCQUN2QyxNQUFNLEVBQUUsb0JBQWtCLElBQUksU0FBSSxJQUFJLFNBQU07eUJBQzdDO3FCQUNGLENBQUE7b0JBRUQscUJBQU0seUJBQWlCLENBQUMsT0FBTyxFQUFFLFNBQVMsRUFBRSxFQUFFLElBQUksTUFBQSxFQUFFLENBQUMsRUFBQTs7b0JBQXJELFNBQXFELENBQUE7b0JBRXJELHFCQUFNLFFBQVEsQ0FBQyxNQUFNLENBQUMseUJBQXlCLEVBQUUsc0JBQW9CLElBQUksTUFBRyxDQUFDO3dCQUU3RTs7OzJCQUdHO3NCQUwwRTs7b0JBQTdFLFNBQTZFLENBQUE7b0JBRTdFOzs7dUJBR0c7b0JBQ0gscUJBQU0sbUJBQVcsQ0FBQyxPQUFPLGlCQUNwQixTQUFTLENBQUMsR0FBRyxDQUFDLFVBQUMsUUFBUSxJQUFLLE9BQUEsUUFBUSxDQUFDLE1BQU0sRUFBZixDQUFlLENBQUM7NEJBQy9DLHlCQUF5QjsyQkFFekIsRUFBQTs7b0JBUkY7Ozt1QkFHRztvQkFDSCxTQUlFLENBQUE7Ozs7O0NBQ0gsQ0FBQSJ9

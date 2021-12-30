@@ -1,14 +1,15 @@
 import React, { memo, FC } from 'react'
-import { Screen, View, Text } from '@components'
+import { Box, Text } from '@components'
 import { useTheme } from '@hooks'
 import { config } from '@config'
-import { Props } from './<%= props.name %>.props'
+import { Props } from './<%= props.name %>.props'
 import { styles } from './<%= props.name %>.styles'
+import { screen } from '@utils/screen'
 
-export const <%= props.name %>: FC<Props> = memo(({ ...props }) => {
+export const <%= props.name %>: FC<Props> = screen({}, ({ ...props }) => {
   return (
-    <Screen>
+    <Box>
       {/* your screen */}
-    </Screen>
+    </Box>
   )
 })
