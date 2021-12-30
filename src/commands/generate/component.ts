@@ -16,11 +16,12 @@ export const run = async function (toolbox: GluegunToolbox): Promise<void> {
   )
   name = strings.pascalCase(name)
 
+  /*{
+    template: 'component/component.story.tsx.ejs',
+    target: `app/components/${name}/${name}.story.tsx`,
+  },*/ 
+
   const templates = [
-    {
-      template: 'component/component.story.tsx.ejs',
-      target: `app/components/${name}/${name}.story.tsx`,
-    },
     {
       template: 'component/index.ts.ejs',
       target: `app/components/${name}/index.ts`,
@@ -43,13 +44,13 @@ export const run = async function (toolbox: GluegunToolbox): Promise<void> {
 
   await patching.append('app/components/index.ts', `export * from './${name}'`)
 
-  await patching.append(
+  /*await patching.append(
     'storybook/storybook-registry.ts',
     `require('../app/components/${name}/${name}.story')`
-  )
+  )*/
   await runPrettier(toolbox, [
     ...templates.map((template) => template.target),
     'app/components/index.ts',
-    'storybook/storybook-registry.ts',
+    //'storybook/storybook-registry.ts',
   ])
 }
