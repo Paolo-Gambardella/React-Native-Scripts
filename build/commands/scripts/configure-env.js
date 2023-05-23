@@ -40,29 +40,25 @@ exports.run = exports.description = void 0;
 var utils_1 = require("../../utils");
 exports.description = 'Update native files to match current env';
 exports.run = function (toolbox) { return __awaiter(void 0, void 0, void 0, function () {
-    var filesystem, parameters, print, patching, envName, buildNumber, envNameSpinner, version, env, splittedEnv, splittedEnv, expoSpinner, packageJson, _a, _b, sdkVersion, spinner, exploPlist, infoPlist, androidManifest, appBuildGradle, envSpinner, releaseChannel;
+    var filesystem, parameters, print, patching, env, version, buildNumber, envNameSpinner, expoSpinner, packageJson, _a, _b, sdkVersion, spinner, exploPlist, infoPlist, androidManifest, appBuildGradle, envSpinner;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 filesystem = toolbox.filesystem, parameters = toolbox.parameters, print = toolbox.print, patching = toolbox.patching;
-                return [4 /*yield*/, utils_1.promptBlankParam(toolbox, parameters.first, "What's the env (example-v1.0.0 or 1.0.0-example)")
+                return [4 /*yield*/, utils_1.promptBlankParam(toolbox, parameters.first, "What's the env (staging/production)")];
+            case 1:
+                env = _c.sent();
+                return [4 /*yield*/, utils_1.promptBlankParam(toolbox, parameters.first, "What's the version")];
+            case 2:
+                version = _c.sent();
+                return [4 /*yield*/, utils_1.promptBlankParam(toolbox, parameters.first, "What's the build number")
                     // Get env informations (stage and version)
                 ];
-            case 1:
-                envName = _c.sent();
-                buildNumber = (parameters.second || 1).toString();
+            case 3:
+                buildNumber = _c.sent();
                 envNameSpinner = print.spin('Getting env informations... 🧑‍🍳');
-                if (envName.match(/^\d.\d.\d-\w+$/)) {
-                    splittedEnv = envName.split('-');
-                    version = splittedEnv[0];
-                    env = splittedEnv[1];
-                }
-                else if (envName.match(/^\w+-v\d.\d.\d$/)) {
-                    splittedEnv = envName.split('-v');
-                    env = splittedEnv[0];
-                    version = splittedEnv[1];
-                }
-                else {
+                if (!version.match(/^\d.\d.\d/)) {
+                    // 1.0.0-example
                     envNameSpinner.fail('Env is not matching example-v1.0.0 or 1.0.0-example');
                     return [2 /*return*/];
                 }
@@ -70,7 +66,7 @@ exports.run = function (toolbox) { return __awaiter(void 0, void 0, void 0, func
                 expoSpinner = print.spin('Getting Expo SDK version... 🧑‍🍳');
                 _b = (_a = JSON).parse;
                 return [4 /*yield*/, filesystem.readAsync('package.json')];
-            case 2:
+            case 4:
                 packageJson = _b.apply(_a, [_c.sent()]);
                 sdkVersion = packageJson.dependencies.expo;
                 if (!sdkVersion) {
@@ -83,12 +79,12 @@ exports.run = function (toolbox) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, filesystem.findAsync('ios', {
                         matching: '**/Supporting/Expo.plist',
                     })];
-            case 3:
+            case 5:
                 exploPlist = (_c.sent())[0];
                 return [4 /*yield*/, filesystem.findAsync('ios', {
                         matching: '**/Info.plist',
                     })];
-            case 4:
+            case 6:
                 infoPlist = (_c.sent())[0];
                 androidManifest = 'android/app/src/main/AndroidManifest.xml';
                 appBuildGradle = 'android/app/build.gradle';
@@ -101,51 +97,61 @@ exports.run = function (toolbox) { return __awaiter(void 0, void 0, void 0, func
                 }
                 spinner.succeed('Native projects are valids 🧖‍♂️');
                 envSpinner = print.spin('Updating env... 🙈');
-                return [4 /*yield*/, patching.patch('app/config/config.ts', {
-                        insert: "const stage = '" + env + "'",
-                        replace: /.*const stage.*/gm,
+                return [4 /*yield*/, patching.patch('app.config.js', {
+                        insert: "const env = '" + env + "'",
+                        replace: /.*const env.*/gm,
                     })];
-            case 5:
+            case 7:
                 _c.sent();
                 envSpinner.succeed('Env set to ' + env + ' 👍');
                 // Patch native files
                 spinner.start('Patching files...');
-                releaseChannel = version + '-' + env;
-                return [4 /*yield*/, patching.patch(exploPlist, {
-                        insert: releaseChannel,
-                        replace: 'release-channel-to-update',
-                    })];
-            case 6:
-                _c.sent();
+                // const releaseChannel = version + '-' + env
+                // await patching.patch(exploPlist, {
+                //   insert: releaseChannel,
+                //   replace: 'release-channel-to-update',
+                // })
                 return [4 /*yield*/, patching.patch(exploPlist, {
                         insert: sdkVersion,
                         replace: 'sdk-version-to-update',
                     })];
-            case 7:
+            case 8:
+                // const releaseChannel = version + '-' + env
+                // await patching.patch(exploPlist, {
+                //   insert: releaseChannel,
+                //   replace: 'release-channel-to-update',
+                // })
                 _c.sent();
                 return [4 /*yield*/, patching.patch(infoPlist, {
                         insert: version,
                         replace: '$(MARKETING_VERSION)',
                     })];
-            case 8:
+            case 9:
                 _c.sent();
                 return [4 /*yield*/, patching.patch(infoPlist, {
                         insert: buildNumber,
                         replace: '$(CURRENT_PROJECT_VERSION)',
-                    })];
-            case 9:
-                _c.sent();
-                return [4 /*yield*/, patching.patch(androidManifest, {
-                        insert: releaseChannel,
-                        replace: 'release-channel-to-update',
-                    })];
+                    })
+                    // await patching.patch(androidManifest, {
+                    //   insert: releaseChannel,
+                    //   replace: 'release-channel-to-update',
+                    // })
+                ];
             case 10:
                 _c.sent();
+                // await patching.patch(androidManifest, {
+                //   insert: releaseChannel,
+                //   replace: 'release-channel-to-update',
+                // })
                 return [4 /*yield*/, patching.patch(androidManifest, {
                         insert: sdkVersion,
                         replace: 'sdk-version-to-update',
                     })];
             case 11:
+                // await patching.patch(androidManifest, {
+                //   insert: releaseChannel,
+                //   replace: 'release-channel-to-update',
+                // })
                 _c.sent();
                 return [4 /*yield*/, patching.patch(appBuildGradle, {
                         insert: 'versionName "' + version + '"',
@@ -175,8 +181,13 @@ exports.run = function (toolbox) { return __awaiter(void 0, void 0, void 0, func
             case 15:
                 _c.sent();
                 spinner.succeed('Native files patched, parfait 💥');
+                return [4 /*yield*/, utils_1.runPrettier(toolbox, [
+                        'app.config.js',
+                    ])];
+            case 16:
+                _c.sent();
                 return [2 /*return*/];
         }
     });
 }); };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlndXJlLWVudi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9jb21tYW5kcy9zY3JpcHRzL2NvbmZpZ3VyZS1lbnYudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EscUNBQThDO0FBRWpDLFFBQUEsV0FBVyxHQUFHLDBDQUEwQyxDQUFBO0FBRXhELFFBQUEsR0FBRyxHQUFHLFVBQU8sT0FBdUI7Ozs7O2dCQUN2QyxVQUFVLEdBQWtDLE9BQU8sV0FBekMsRUFBRSxVQUFVLEdBQXNCLE9BQU8sV0FBN0IsRUFBRSxLQUFLLEdBQWUsT0FBTyxNQUF0QixFQUFFLFFBQVEsR0FBSyxPQUFPLFNBQVosQ0FBWTtnQkFJM0MscUJBQU0sd0JBQWdCLENBQ3BDLE9BQU8sRUFDUCxVQUFVLENBQUMsS0FBSyxFQUNoQixrREFBa0QsQ0FDbkQ7b0JBRUQsMkNBQTJDO2tCQUYxQzs7Z0JBSkssT0FBTyxHQUFHLFNBSWY7Z0JBR0ssV0FBVyxHQUFHLENBQUMsVUFBVSxDQUFDLE1BQU0sSUFBSSxDQUFDLENBQUMsQ0FBQyxRQUFRLEVBQUUsQ0FBQTtnQkFDakQsY0FBYyxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsbUNBQW1DLENBQUMsQ0FBQTtnQkFHdEUsSUFBSSxPQUFPLENBQUMsS0FBSyxDQUFDLGdCQUFnQixDQUFDLEVBQUU7b0JBRTdCLFdBQVcsR0FBRyxPQUFPLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxDQUFBO29CQUN0QyxPQUFPLEdBQUcsV0FBVyxDQUFDLENBQUMsQ0FBQyxDQUFBO29CQUN4QixHQUFHLEdBQUcsV0FBVyxDQUFDLENBQUMsQ0FBQyxDQUFBO2lCQUNyQjtxQkFBTSxJQUFJLE9BQU8sQ0FBQyxLQUFLLENBQUMsaUJBQWlCLENBQUMsRUFBRTtvQkFFckMsV0FBVyxHQUFHLE9BQU8sQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLENBQUE7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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlndXJlLWVudi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9jb21tYW5kcy9zY3JpcHRzL2NvbmZpZ3VyZS1lbnYudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EscUNBQTJEO0FBRTlDLFFBQUEsV0FBVyxHQUFHLDBDQUEwQyxDQUFBO0FBRXhELFFBQUEsR0FBRyxHQUFHLFVBQU8sT0FBdUI7Ozs7O2dCQUN2QyxVQUFVLEdBQWtDLE9BQU8sV0FBekMsRUFBRSxVQUFVLEdBQXNCLE9BQU8sV0FBN0IsRUFBRSxLQUFLLEdBQWUsT0FBTyxNQUF0QixFQUFFLFFBQVEsR0FBSyxPQUFPLFNBQVosQ0FBWTtnQkFJL0MscUJBQU0sd0JBQWdCLENBQ2hDLE9BQU8sRUFDUCxVQUFVLENBQUMsS0FBSyxFQUNoQixxQ0FBcUMsQ0FDdEMsRUFBQTs7Z0JBSkssR0FBRyxHQUFHLFNBSVg7Z0JBRWUscUJBQU0sd0JBQWdCLENBQ3BDLE9BQU8sRUFDUCxVQUFVLENBQUMsS0FBSyxFQUNoQixvQkFBb0IsQ0FDckIsRUFBQTs7Z0JBSkssT0FBTyxHQUFHLFNBSWY7Z0JBRW1CLHFCQUFNLHdCQUFnQixDQUN4QyxPQUFPLEVBQ1AsVUFBVSxDQUFDLEtBQUssRUFDaEIseUJBQXlCLENBQzFCO29CQUVELDJDQUEyQztrQkFGMUM7O2dCQUpLLFdBQVcsR0FBRyxTQUluQjtnQkFHSyxjQUFjLEdBQUcsS0FBSyxDQUFDLElBQUksQ0FBQyxtQ0FBbUMsQ0FBQyxDQUFBO2dCQUN0RSxJQUFJLENBQUMsT0FBTyxDQUFDLEtBQUssQ0FBQyxXQUFXLENBQUMsRUFBRTtvQkFDL0IsZ0JBQWdCO29CQUNoQixjQUFjLENBQUMsSUFBSSxDQUFDLHFEQUFxRCxDQUFDLENBQUE7b0JBQzFFLHNCQUFNO2lCQUNQO2dCQUNELGNBQWMsQ0FBQyxPQUFPLENBQ3BCLE9BQU8sR0FBRyxHQUFH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

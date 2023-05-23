@@ -1,8 +1,7 @@
 {
   "name": "react-native-scripts-cli",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "react-native-scripts-cli CLI",
-  "private": true,
   "types": "build/types/types.d.ts",
   "bin": {
     "rnsc": "bin/react-native-scripts-cli"

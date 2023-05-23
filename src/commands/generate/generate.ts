@@ -5,7 +5,7 @@ import * as screen from './screen'
 import * as query from './query'
 import * as mutation from './mutation'
 
-type Choice = 'Component' | 'Navigator' | 'Screen' | 'Query' | 'Mutation'
+type Choice = 'Component' | 'Navigator' | 'Screen' // | 'Query' | 'Mutation'
 
 const generators: Record<
   Choice,
@@ -18,8 +18,8 @@ const generators: Record<
   Component: component,
   Navigator: navigator,
   Screen: screen,
-  Query: query,
-  Mutation: mutation,
+  // Query: query,
+  // Mutation: mutation,
 }
 
 export const description = 'List of generators'

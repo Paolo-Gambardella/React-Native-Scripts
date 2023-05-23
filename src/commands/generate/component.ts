@@ -37,6 +37,14 @@ export const run = async function (toolbox: GluegunToolbox): Promise<void> {
       template: 'component/component.tsx.ejs',
       target: `app/components/${name}/${name}.tsx`,
     },
+    {
+      template: 'component/component.spec.tsx.ejs',
+      target: `app/components/${name}/__tests__/${name}.spec.tsx`,
+    },
+    {
+      template: 'component/component.mock.ts.ejs',
+      target: `app/components/${name}/__mocks__/${name}.mock.ts`,
+    },
   ]
 
   await generateTemplates(toolbox, templates, { name })

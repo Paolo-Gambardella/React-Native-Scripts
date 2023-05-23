@@ -2,10 +2,10 @@ import { GluegunToolbox } from 'gluegun'
 import * as fontello from './fontello'
 import * as configureEnv from './configure-env'
 
-type Choice = 'Fontello' | 'Configure env'
+type Choice = 'Configure env'
 
 const scripts: Record<Choice, typeof fontello | typeof configureEnv> = {
-  Fontello: fontello,
+  // Fontello: fontello,
   'Configure env': configureEnv,
 }
 

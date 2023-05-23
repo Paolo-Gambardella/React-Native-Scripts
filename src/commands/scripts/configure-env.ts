@@ -1,5 +1,5 @@
 import { GluegunToolbox } from 'gluegun'
-import { promptBlankParam } from '../../utils'
+import { promptBlankParam, runPrettier } from '../../utils'
 
 export const description = 'Update native files to match current env'
 
@@ -8,28 +8,28 @@ export const run = async (toolbox: GluegunToolbox): Promise<void> => {
 
   // validation
   // example-v1.0.0 or 1.0.0-example
-  const envName = await promptBlankParam(
+  const env = await promptBlankParam(
     toolbox,
     parameters.first,
-    "What's the env (example-v1.0.0 or 1.0.0-example)"
+    "What's the env (staging/production)"
+  )
+
+  const version = await promptBlankParam(
+    toolbox,
+    parameters.first,
+    "What's the version"
+  )
+
+  const buildNumber = await promptBlankParam(
+    toolbox,
+    parameters.first,
+    "What's the build number"
   )
 
   // Get env informations (stage and version)
-  const buildNumber = (parameters.second || 1).toString()
   const envNameSpinner = print.spin('Getting env informations... 🧑‍🍳')
-  let version: string
-  let env: string
-  if (envName.match(/^\d.\d.\d-\w+$/)) {
+  if (!version.match(/^\d.\d.\d/)) {
     // 1.0.0-example
-    const splittedEnv = envName.split('-')
-    version = splittedEnv[0]
-    env = splittedEnv[1]
-  } else if (envName.match(/^\w+-v\d.\d.\d$/)) {
-    // example-v1.0.0
-    const splittedEnv = envName.split('-v')
-    env = splittedEnv[0]
-    version = splittedEnv[1]
-  } else {
     envNameSpinner.fail('Env is not matching example-v1.0.0 or 1.0.0-example')
     return
   }
@@ -78,19 +78,19 @@ export const run = async (toolbox: GluegunToolbox): Promise<void> => {
 
   // Update .env
   const envSpinner = print.spin('Updating env... 🙈')
-  await patching.patch('app/config/config.ts', {
-    insert: "const stage = '" + env + "'",
-    replace: /.*const stage.*/gm,
+  await patching.patch('app.config.js', {
+    insert: "const env = '" + env + "'",
+    replace: /.*const env.*/gm,
   })
   envSpinner.succeed('Env set to ' + env + ' 👍')
 
   // Patch native files
   spinner.start('Patching files...')
-  const releaseChannel = version + '-' + env
-  await patching.patch(exploPlist, {
-    insert: releaseChannel,
-    replace: 'release-channel-to-update',
-  })
+  // const releaseChannel = version + '-' + env
+  // await patching.patch(exploPlist, {
+  //   insert: releaseChannel,
+  //   replace: 'release-channel-to-update',
+  // })
   await patching.patch(exploPlist, {
     insert: sdkVersion,
     replace: 'sdk-version-to-update',
@@ -103,10 +103,10 @@ export const run = async (toolbox: GluegunToolbox): Promise<void> => {
     insert: buildNumber,
     replace: '$(CURRENT_PROJECT_VERSION)',
   })
-  await patching.patch(androidManifest, {
-    insert: releaseChannel,
-    replace: 'release-channel-to-update',
-  })
+  // await patching.patch(androidManifest, {
+  //   insert: releaseChannel,
+  //   replace: 'release-channel-to-update',
+  // })
   await patching.patch(androidManifest, {
     insert: sdkVersion,
     replace: 'sdk-version-to-update',
@@ -130,4 +130,8 @@ export const run = async (toolbox: GluegunToolbox): Promise<void> => {
   })
 
   spinner.succeed('Native files patched, parfait 💥')
+
+  await runPrettier(toolbox, [
+    'app.config.js',
+  ])
 }
